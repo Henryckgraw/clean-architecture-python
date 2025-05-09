@@ -10,6 +10,7 @@ Criar env
 
 Command env
     .\venv\Scripts\activate
+    source venv/Scripts/activate
     .\venv\Scripts\pip3 freeze > requirements.txt
     .\venv\Scripts\pip3 install -r requirements.txt
 
