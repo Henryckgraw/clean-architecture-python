@@ -1,16 +1,29 @@
-from src import people_handler
+from src.people_handler import People, GetPerson, PutPerson, GetPeople
+from pprint import pprint
 
-#print(people_handler.PeopleHandler.get_person(
-# name="Lucas", 
-# last_name="Silva"))
-#print(people_handler.PeopleHandler.put_person(
-# name="João", 
-# last_name="Gomes", 
-# dt_birth="2010-11-01"))
-#print(people_handler.PeopleHandler.get_person(
-# name="Lucas", 
-# last_name="Silva"))
-print(people_handler.PeopleHandler.get_person(
-    name="João", 
-    last_name="Gomes"))
-print(people_handler.PeopleHandler.get_people())
+p = People(
+        name="Marcello", 
+        last_name="Oliveira", 
+        dt_birth="1988-08-13"
+    )
+print(f"{p.name} {p.last_name} - {p.dt_birth}")
+
+print("Put Person:")
+pprint(str(PutPerson(p)))
+
+print("\nGet Person:")
+p = (
+        GetPerson(
+            name="João",
+            last_name="Gomes"
+        )
+    )
+print(p.to_dict())
+print(str(p))
+
+print("\nGet People:")
+pe = GetPeople()
+pprint(pe.to_dict())
+for p in pe:
+    print(str(p))
+

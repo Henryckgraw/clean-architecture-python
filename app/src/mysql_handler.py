@@ -1,14 +1,19 @@
 import mysql.connector
 
-class MysqlHandler:
+class DbHandler:
     """
     A class to handle MySQL database connections and operations.
     """
-    def __init__(self, host, user, password, database):
-        self.host = host
-        self.user = user
-        self.password = password
-        self.database = database
+    host: str
+    user: str
+    password: str
+    database: str
+
+    def __init__(self):
+        self.host = "127.0.0.1"
+        self.user = "Aplication"
+        self.password = "1234"
+        self.database = "cadastro"
 
     def connect(self):
         try:
@@ -36,8 +41,89 @@ class MysqlHandler:
                 connection.commit()
                 return cursor.fetchall()
             except mysql.connector.Error as err:
-                print(f"Error: {err}")
+                return f"Error: {err}"
             finally:
                 cursor.close()
                 self.close_connection(connection)
-        return None
+
+
+    def execute_select(self, db, parameters) -> list[dict]:
+        """
+        Executes a SELECT query and returns the results.
+
+        {
+            "select": [
+               "nome",
+               "sobrenome",
+               "dt_nasc"
+            ],
+            "from": "usuario",
+            "where": {
+               "nome": f"{name}",
+               "sobrenome": f"{last_name}"
+            }
+        }
+        """
+
+        return db.execute_query(
+            f"""
+            SELECT
+                {', '.join(parameters['select'])}
+            FROM
+                {parameters['from']}
+            WHERE
+                {' AND '.join([f"{k} = '{v}'" for k, v in parameters['where'].items()])}
+            """
+        )
+
+    def execute_insert(self, db, parameters) -> str:
+        """
+        Executes a SELECT query and returns the results.
+
+        {
+            "fields": [
+               "nome",
+               "sobrenome",
+               "dt_nasc"
+            ],
+            "to": "usuario",
+            "values": [
+                name,
+                last_name,
+                dt_birth
+            ]
+        }
+        """
+
+        return db.execute_query(
+            f"""
+            INSERT INTO
+                {parameters['to']}({', '.join(parameters['fields'])})
+            VALUES
+                ("{'", "'.join(parameters['values'])}")
+            """
+        )
+
+    def execute_select_all(self, db, parameters) -> list[dict]:
+        """
+        Executes a SELECT query and returns the results.
+
+        {
+            "select": [
+               "nome",
+               "sobrenome",
+               "dt_nasc"
+            ],
+            "from": "usuario"
+        }
+        """
+
+        return db.execute_query(
+            f"""
+            SELECT
+                {', '.join(parameters['select'])}
+            FROM
+                {parameters['from']}
+            """
+        )
+    
