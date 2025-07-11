@@ -1,4 +1,4 @@
-from src.mysql_handler import DbHandler
+from src.mysql_handler import SelectData, InsertData, SelectFullData
 
 class People:
     """
@@ -24,7 +24,7 @@ class People:
     def __str__(self):
         return f"name: {self.name}, last_name: {self.last_name}, date_birth: {self.dt_birth}"
     
-class GetPerson():
+class GetPerson:
     """ 
     A class to handle operation related to retrieving a person's information.
     """
@@ -33,8 +33,8 @@ class GetPerson():
         """
         Initializes the PeopleHandler class.
         """
-        self.dbConnection = DbHandler()
         self.name, self.last_name = name, last_name
+        self.databaseoperation = SelectData()
         self.response = self.get_person()
 
     def __str__(self):
@@ -51,7 +51,6 @@ class GetPerson():
         """
         Returns a dictionary with the person's name and last name.
         """
-        db = self.dbConnection
         parameters = {
             "select": [
                "nome",
@@ -65,7 +64,7 @@ class GetPerson():
             }
         }
 
-        people = db.execute_select(db, parameters)
+        people = self.databaseoperation.execute(parameters=parameters)
 
         if not people:
             return None
@@ -77,7 +76,7 @@ class GetPerson():
             )
 
 
-class PutPerson():
+class PutPerson:
     """ 
     A class to handle operation related to input a person's information.
     """
@@ -86,8 +85,8 @@ class PutPerson():
         """
         Initializes the PeopleHandler class.
         """
-        self.dbConnection = DbHandler()
         self.people = p
+        self.databaseoperation = InsertData()
         self.response = self.put_person()
 
     def __str__(self):
@@ -98,7 +97,6 @@ class PutPerson():
         """
         Adds a person to the database.
         """
-        db = self.dbConnection
         parameters = {
             "fields": [
                "nome",
@@ -113,7 +111,7 @@ class PutPerson():
             ]
         }
 
-        people = db.execute_insert(db, parameters)
+        people = self.databaseoperation.execute(parameters=parameters)
 
         if "Error" not in people:
             return f"Success put person: {self.people.name} {self.people.last_name}"
@@ -121,7 +119,7 @@ class PutPerson():
             return f"Error put person: {people}"
 
 
-class GetPeople():
+class GetPeople:
     """ 
     A class to handle operations related to retrieving a people's information.
     """
@@ -130,7 +128,7 @@ class GetPeople():
         """
         Initializes the PeopleHandler class.
         """
-        self.dbConnection = DbHandler()
+        self.databaseoperation = SelectFullData()
         self._people = self.get_people()
 
     def __iter__(self):
@@ -145,7 +143,6 @@ class GetPeople():
         """
         Returns a list of dictionaries with the people's names and last names.
         """
-        db = self.dbConnection
         parameters = {
             "select": [
                "nome",
@@ -155,7 +152,7 @@ class GetPeople():
             "from": "usuario"
         }
 
-        people = db.execute_select_all(db, parameters)
+        people = self.databaseoperation.execute(parameters=parameters)
         
         list_person = []
         for person in people:

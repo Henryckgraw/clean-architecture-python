@@ -2,9 +2,9 @@ from src.people_handler import People, GetPerson, PutPerson, GetPeople
 from pprint import pprint
 
 p = People(
-        name="Marcello", 
+        name="Maria", 
         last_name="Oliveira", 
-        dt_birth="1988-08-13"
+        dt_birth="1959-05-20"
     )
 print(f"{p.name} {p.last_name} - {p.dt_birth}")
 

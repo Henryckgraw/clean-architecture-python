@@ -1,4 +1,5 @@
 import mysql.connector
+import abc
 
 class DbHandler:
     """
@@ -47,25 +48,40 @@ class DbHandler:
                 self.close_connection(connection)
 
 
-    def execute_select(self, db, parameters) -> list[dict]:
-        """
-        Executes a SELECT query and returns the results.
+class DatabaseOperation:
+    """
+    A base class for database operations.
+    """
+    __metaclass__ = abc.ABCMeta
 
-        {
-            "select": [
-               "nome",
-               "sobrenome",
-               "dt_nasc"
-            ],
-            "from": "usuario",
-            "where": {
-               "nome": f"{name}",
-               "sobrenome": f"{last_name}"
-            }
+    @abc.abstractmethod
+    def execute(self, parameters):
+        return
+
+
+class SelectData(DatabaseOperation):
+    """
+    Executes a SELECT query and returns the results.
+
+    {
+        "select": [
+            "nome",
+            "sobrenome",
+            "dt_nasc"
+        ],
+        "from": "usuario",
+        "where": {
+            "nome": f"{name}",
+            "sobrenome": f"{last_name}"
         }
-        """
+    }
+    """
+    def __init__(self):
+        self.db_handler = DbHandler()
 
-        return db.execute_query(
+    def execute(self, parameters) -> list[dict]:
+
+        return self.db_handler.execute_query(
             f"""
             SELECT
                 {', '.join(parameters['select'])}
@@ -76,26 +92,31 @@ class DbHandler:
             """
         )
 
-    def execute_insert(self, db, parameters) -> str:
-        """
-        Executes a SELECT query and returns the results.
 
-        {
-            "fields": [
-               "nome",
-               "sobrenome",
-               "dt_nasc"
-            ],
-            "to": "usuario",
-            "values": [
-                name,
-                last_name,
-                dt_birth
-            ]
-        }
-        """
+class InsertData(DatabaseOperation):
+    """
+    Executes a SELECT query and returns the results.
 
-        return db.execute_query(
+    {
+        "fields": [
+            "nome",
+            "sobrenome",
+            "dt_nasc"
+        ],
+        "to": "usuario",
+        "values": [
+            name,
+            last_name,
+            dt_birth
+        ]
+    }
+    """
+    def __init__(self):
+        self.db_handler = DbHandler()
+
+    def execute(self, parameters) -> str:
+
+        return self.db_handler.execute_query(
             f"""
             INSERT INTO
                 {parameters['to']}({', '.join(parameters['fields'])})
@@ -104,21 +125,26 @@ class DbHandler:
             """
         )
 
-    def execute_select_all(self, db, parameters) -> list[dict]:
-        """
-        Executes a SELECT query and returns the results.
 
-        {
-            "select": [
-               "nome",
-               "sobrenome",
-               "dt_nasc"
-            ],
-            "from": "usuario"
-        }
-        """
+class SelectFullData(DatabaseOperation):
+    """
+    Executes a SELECT query and returns the results.
 
-        return db.execute_query(
+    {
+        "select": [
+            "nome",
+            "sobrenome",
+            "dt_nasc"
+        ],
+        "from": "usuario"
+    }
+    """
+    def __init__(self):
+        self.db_handler = DbHandler()
+
+    def execute(self, parameters) -> list[dict]:
+
+        return self.db_handler.execute_query(
             f"""
             SELECT
                 {', '.join(parameters['select'])}
