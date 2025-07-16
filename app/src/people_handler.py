@@ -49,11 +49,11 @@ class PersonParent(Person):
 
     def __str__(self):
         return f"""name: {self.name},
-                   last_name: {self.last_name},
-                   date_birth: {self.dt_birth},
-                   type: {self.type},
-                   sons: {self.sons}
-                """
+last_name: {self.last_name},
+date_birth: {self.dt_birth},
+type: {self.type},
+sons: {self.sons}
+"""
 
 class PersonChildless(Person):
     """
@@ -81,6 +81,70 @@ class PersonChildless(Person):
 last_name: {self.last_name},
 date_birth: {self.dt_birth},
 type: {self.type}
+"""
+
+class PersonMarriedChidless(PersonChildless):
+    """
+    A class people to represent a person with name, last name, and date of birth.
+    """
+    def __init__(
+        self,
+        name: str,
+        last_name: str,
+        dt_birth: str,
+        person: Person
+    ):
+        super().__init__(name, last_name, dt_birth)
+        self.spouse = f"{person.name} {person.last_name}"
+
+    def to_dict(self):
+        return {
+            "name": self.name, 
+            "last_name": self.last_name, 
+            "date_birth": self.dt_birth,
+            "type": self.type,
+            "spouse": self.spouse
+        }
+
+    def __str__(self):
+        return f"""name: {self.name},
+last_name: {self.last_name},
+date_birth: {self.dt_birth},
+type: {self.type},
+spouse: {self.spouse}
+"""
+    
+class PersonMarriedParent(PersonParent):
+    """
+    A class people to represent a person with name, last name, and date of birth.
+    """
+    def __init__(
+        self,
+        name: str,
+        last_name: str,
+        dt_birth: str,
+        person: Person
+    ):
+        super().__init__(name, last_name, dt_birth)
+        self.spouse = f"{person.name} {person.last_name}"
+
+    def to_dict(self):
+        return {
+            "name": self.name, 
+            "last_name": self.last_name, 
+            "date_birth": self.dt_birth,
+            "type": self.type,
+            "sons": self.sons,
+            "spouse": self.spouse
+        }
+
+    def __str__(self):
+        return f"""name: {self.name},
+last_name: {self.last_name},
+date_birth: {self.dt_birth},
+type: {self.type},
+sons: {self.sons},
+spouse: {self.spouse}
 """
 
 class GetPerson:
