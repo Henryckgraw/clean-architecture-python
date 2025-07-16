@@ -16,3 +16,6 @@ Command env
 
 pre-commit
     pre-commit install
+
+
+    current_branch=$(git rev-parse --abbrev-ref HEAD) && d=`date +%Y%m%d_%H%M%S` && git push origin $current_branch && echo $d
