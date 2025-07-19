@@ -1,4 +1,7 @@
-from src.mysql_handler import SelectData, InsertData, SelectFullData
+from src.mysql_handler import (
+    InsertData,
+    SelectFullData
+)
 
 class Person:
     """
@@ -23,7 +26,8 @@ class Person:
 
     def __str__(self):
         return f"name: {self.name}, last_name: {self.last_name}, date_birth: {self.dt_birth}"
-    
+
+
 class PersonParent(Person):
     """
     A class Person to represent a person with name, last name, and date of birth.
@@ -55,6 +59,7 @@ type: {self.type},
 sons: {self.sons}
 """
 
+
 class PersonChildless(Person):
     """
     A class people to represent a person with name, last name, and date of birth.
@@ -83,7 +88,8 @@ date_birth: {self.dt_birth},
 type: {self.type}
 """
 
-class PersonMarriedChidless(PersonChildless):
+
+class PersonMarriedChildless(PersonChildless):
     """
     A class people to represent a person with name, last name, and date of birth.
     """
@@ -113,7 +119,8 @@ date_birth: {self.dt_birth},
 type: {self.type},
 spouse: {self.spouse}
 """
-    
+
+
 class PersonMarriedParent(PersonParent):
     """
     A class people to represent a person with name, last name, and date of birth.
@@ -146,57 +153,6 @@ type: {self.type},
 sons: {self.sons},
 spouse: {self.spouse}
 """
-
-class GetPerson:
-    """ 
-    A class to handle operation related to retrieving a person's information.
-    """
-
-    def __init__(self, name: str, last_name: str):
-        """
-        Initializes the PeopleHandler class.
-        """
-        self.name, self.last_name = name, last_name
-        self.databaseoperation = SelectData()
-        self.response = self.get_person()
-
-    def __str__(self):
-        if self.response:
-            return str(self.response)
-        return "Person not found"
-
-    def to_dict(self):
-        if self.response:
-            return self.response.to_dict()
-        return "Person not found"
-
-    def get_person(self) -> Person:
-        """
-        Returns a dictionary with the person's name and last name.
-        """
-        parameters = {
-            "select": [
-               "nome",
-               "sobrenome",
-               "dt_nasc"
-            ],
-            "from": "usuario",
-            "where": {
-               "nome": f"{self.name}",
-               "sobrenome": f"{self.last_name}"
-            }
-        }
-
-        person = self.databaseoperation.execute(parameters=parameters)
-
-        if not person:
-            return None
-        else:
-            return Person(
-                name=person[0][0],
-                last_name=person[0][1],
-                dt_birth=person[0][2].strftime("%m/%d/%Y")
-            )
 
 
 class PutPerson:
@@ -275,10 +231,10 @@ class GetPeople:
             "from": "usuario"
         }
 
-        person = self.databaseoperation.execute(parameters=parameters)
-        
+        people = self.databaseoperation.execute(parameters=parameters)
+
         list_person = []
-        for person in person:
+        for person in people:
             list_person.append(
                 Person(
                     name=person[0],
