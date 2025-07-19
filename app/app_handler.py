@@ -1,7 +1,5 @@
-from src.people_handler import (
+from src.person_handler import (
     Person,
-    GetPeople,
-    PutPerson,
     PersonParent,
     PersonChildless,
     PersonMarriedParent,
@@ -12,19 +10,18 @@ from src.get_person import (
     GetPersonImplementation,
     GetPersonImplementationSubst
 )
+from src.get_people import (
+    GetPeople,
+    GetPeopleImplementation
+)
+from src.put_person import (
+    PutPerson,
+    PutPersonImplementation
+)
 from pprint import pprint
 
-# p = Person(
-#         name="Rosana",
-#         last_name="Maria",
-#         dt_birth="1958-06-12"
-#     )
-# print(f"{p.name} {p.last_name} - {p.dt_birth}")
-
-# print("Put Person:")
-# pprint(str(PutPerson(p)))
-
-print("\nPerson with childs:")
+print("\n------- Manipulating Class Person -------\n\n")
+print("Person with childs:")
 p = PersonParent(
         name="Henrique",
         last_name="Oliveira",
@@ -66,6 +63,20 @@ p = PersonMarriedChildless(
     )
 print(str(p))
 
+
+
+print("\n\n------- Manipulating Database -------\n\n")
+p = Person(
+        name="Hanna",
+        last_name="Montanna",
+        dt_birth="1989-11-02"
+    )
+print(f"{p.name} {p.last_name} - {p.dt_birth}")
+
+print("Put Person:")
+putperson = PutPersonImplementation(p)
+pprint(str(PutPerson(putperson)))
+
 print("\nGet Person:")
 getperson = GetPersonImplementation(
     name="João",
@@ -91,7 +102,8 @@ print(p.to_dict())
 print(str(p))
 
 print("\nGet People:")
-pe = GetPeople()
+getpeople = GetPeopleImplementation()
+pe = GetPeople(getpeople)
 pprint(pe.to_dict())
 for p in pe:
     print(str(p))

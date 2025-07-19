@@ -3,7 +3,7 @@ from typing import Optional
 from src.mysql_handler import (
     SelectData
 )
-from src.people_handler import (
+from src.person_handler import (
     Person
 )
 
@@ -13,7 +13,7 @@ class GetPersonInterface(ABC):
     An interface for getting a person's information.
     """
     @abstractmethod
-    def get_person(self) -> Optional['Person']:
+    def get(self) -> Optional['Person']:
         """Retorna um objeto Person ou None."""
         pass
 
@@ -52,7 +52,7 @@ class GetPersonImplementation(GetPersonInterface):
             return self.response.to_dict()
         return "Person not found"
 
-    def get_person(self) -> Person:
+    def get(self) -> Person:
         """
         Returns a dictionary with the person's name and last name.
         """
@@ -101,7 +101,7 @@ class GetPersonImplementationSubst(GetPersonInterface):
     def to_dict(self):
         return "Dictionary representation of GetPersonImplementationSubst"
 
-    def get_person(self) -> Person:
+    def get(self) -> Person:
         return None
 
 
@@ -111,10 +111,10 @@ class GetPerson:
     """
     def __init__(self, handler: GetPersonInterface):
         self.handler = handler
-        self.response = self.get_person()
+        self.response = self.get()
 
-    def get_person(self):
-        return self.handler.get_person()
+    def get(self):
+        return self.handler.get()
 
     def to_dict(self):
         return self.handler.to_dict()
